@@ -15,6 +15,18 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'password_set',
+        'discord_id',
+        'avatar',
+        'bio',
+        'country',
+        'experience',
+        'trading_style',
+        'broker',
+        'banner',
+        'is_public',
+        'favorite_pairs',
+        'custom_setups',
     ];
 
     protected $hidden = [
@@ -22,16 +34,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-    public function dailyAnalyses() {
-        return $this->hasMany(DailyAnalysis::class);
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'password_set' => 'boolean',
+    ];
 
     public function tradingAccounts()
     {

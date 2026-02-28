@@ -8,10 +8,13 @@ use App\Http\Controllers\SuccessController;
 use App\Http\Controllers\ObjectiveController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DiscordAuthController;
+
 
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',    [AuthController::class, 'login']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -19,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile',          [ProfileController::class, 'show']);
     Route::put('/profile',          [ProfileController::class, 'update']);
     Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
+    Route::put('/profile/set-password', [ProfileController::class, 'setPassword']);
 
 
 

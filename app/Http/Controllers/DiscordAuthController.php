@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
@@ -31,7 +31,7 @@ class DiscordAuthController extends Controller
             ]);
             $isMember = true;
             if (!$isMember) {
-                return redirect('http://localhost:8080/login?error=not_member');
+                return redirect('https://mi-trad-work.vercel.app/login?error=not_member');
             }
             $email = $discordUser->getEmail();
             $discordId = $discordUser->getId();
@@ -73,10 +73,10 @@ class DiscordAuthController extends Controller
             'favorite_pairs'=> $user->favorite_pairs,
             'custom_setups' => $user->custom_setups,
         ]));
-            return redirect('http://localhost:8080/login?token=' . urlencode($token) . '&user=' . $userData);
+            return redirect('https://mi-trad-work.vercel.app/login?token=' . urlencode($token) . '&user=' . $userData);
         } catch (\Exception $e) {
             Log::error('Discord error: ' . $e->getMessage());
-            return redirect('http://localhost:8080/login?error=discord_error&msg=' . urlencode($e->getMessage()));
+            return redirect('https://mi-trad-work.vercel.app/login?error=discord_error&msg=' . urlencode($e->getMessage()));
         }
     }
 }

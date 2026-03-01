@@ -17,6 +17,24 @@ Route::get('/test-discord', function () {
     }
 });
 
+Route::get('/test-oauth', function () {
+    $code = request()->get('code', 'test');
+    try {
+        $response = \Illuminate\Support\Facades\Http::timeout(15)
+            ->asForm()
+            ->post('https://discord.com/api/oauth2/token', [
+                'client_id' => env('DISCORD_CLIENT_ID'),
+                'client_secret' => env('DISCORD_CLIENT_SECRET'),
+                'grant_type' => 'authorization_code',
+                'code' => $code,
+                'redirect_uri' => env('DISCORD_REDIRECT_URI'),
+            ]);
+        return response()->json(['status' => $response->status(), 'body' => $response->json()]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage(), 'time' => microtime(true)]);
+    }
+});
+
 Route::get('/', function () {
     return view('welcome');
 });

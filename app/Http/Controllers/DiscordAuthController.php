@@ -20,6 +20,7 @@ class DiscordAuthController extends Controller
     public function callback()
     {
         try {
+            \Illuminate\Support\Facades\Http::withoutVerifying();
             $discordUser = Socialite::driver('discord')->stateless()->user();
             $serverId = env('DISCORD_SERVER_ID');
             $response = Http::withHeaders([

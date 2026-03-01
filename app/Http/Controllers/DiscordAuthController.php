@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use GuzzleHttp\Client;
 class DiscordAuthController extends Controller
 {
         public function redirect()
@@ -21,7 +22,14 @@ class DiscordAuthController extends Controller
     {
         try {
             \Illuminate\Support\Facades\Http::withoutVerifying();
-            $discordUser = Socialite::driver('discord')->stateless()->user();
+            $discordUser = Socialite::driver('discord')
+                ->stateless()
+                ->setHttpClient(new \GuzzleHttp\Client([
+                    'timeout' => 30,
+                    'connect_timeout' => 10,
+                    'verify' => false,
+                ]))
+                ->user();
             $serverId = env('DISCORD_SERVER_ID');
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $discordUser->token,

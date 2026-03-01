@@ -8,17 +8,19 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 class DiscordAuthController extends Controller
 {
-    public function redirect()
+        public function redirect()
     {
         return Socialite::driver('discord')
             ->scopes(['identify', 'email', 'guilds'])
             ->with(['prompt' => 'none'])
+            ->stateless()
             ->redirect();
     }
+
     public function callback()
     {
         try {
-            $discordUser = Socialite::driver('discord')->user();
+            $discordUser = Socialite::driver('discord')->stateless()->user();
             $serverId = env('DISCORD_SERVER_ID');
             $response = Http::withHeaders([
                 'Authorization' => 'Bearer ' . $discordUser->token,

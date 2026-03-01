@@ -21,6 +21,8 @@ class DiscordAuthController extends Controller
     public function callback()
     {
         try {
+            Log::info('=== DISCORD CALLBACK START ===');
+            Log::info('Code: ' . request()->get('code'));
             \Illuminate\Support\Facades\Http::withoutVerifying();
             $discordUser = Socialite::driver('discord')
                 ->stateless()

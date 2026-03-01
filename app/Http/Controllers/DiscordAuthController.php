@@ -57,12 +57,22 @@ class DiscordAuthController extends Controller
             }
             $token = $user->createToken('auth_token')->plainTextToken;
             Log::info('Token created', ['token' => substr($token, 0, 10)]);
-            $userData = urlencode(json_encode([
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'avatar' => $user->avatar,
-            ]));
+        $userData = urlencode(json_encode([
+            'id'            => $user->id,
+            'name'          => $user->name,
+            'email'         => $user->email,
+            'avatar'        => $user->avatar,
+            'bio'           => $user->bio,
+            'country'       => $user->country,
+            'experience'    => $user->experience,
+            'trading_style' => $user->trading_style,
+            'broker'        => $user->broker,
+            'banner'        => $user->banner,
+            'is_public'     => $user->is_public,
+            'password_set'  => $user->password_set,
+            'favorite_pairs'=> $user->favorite_pairs,
+            'custom_setups' => $user->custom_setups,
+        ]));
             return redirect('http://localhost:8080/login?token=' . urlencode($token) . '&user=' . $userData);
         } catch (\Exception $e) {
             Log::error('Discord error: ' . $e->getMessage());

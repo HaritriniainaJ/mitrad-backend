@@ -79,7 +79,8 @@ class DiscordAuthController extends Controller
             return redirect('https://mi-trad-work.vercel.app/login?token=' . urlencode($token) . '&user=' . $userData);
         } catch (\Exception $e) {
             Log::error('Discord error: ' . $e->getMessage());
-            return redirect('https://mi-trad-work.vercel.app/login?error=discord_error&msg=' . urlencode($e->getMessage()));
+            Log::error('Discord callback error: ' . $e->getMessage() . ' | ' . $e->getTraceAsString());
+return redirect('https://mi-trad-work.vercel.app/login?error=discord_error&msg=' . urlencode($e->getMessage()));
         }
     }
 }

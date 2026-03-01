@@ -67,3 +67,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
+
+Route::get('/auth/discord/redirect', [DiscordAuthController::class, 'redirect']);
+Route::get('/auth/discord/callback', [DiscordAuthController::class, 'callback']);

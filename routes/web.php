@@ -52,3 +52,12 @@ Route::get('/create-user/{name}/{email}/{password}', function ($name, $email, $p
 
 Route::get('/auth/discord/redirect', [DiscordAuthController::class, 'redirect']);
 Route::get('/auth/discord/callback', [DiscordAuthController::class, 'callback']);
+Route::get('/debug-db', function () {
+    try {
+        $conn = DB::connection()->getPdo();
+        $tables = DB::select("SELECT tablename FROM pg_tables WHERE schemaname='public'");
+        return response()->json(['status' => 'connected', 'tables' => array_column($tables, 'tablename')]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()]);
+    }
+});

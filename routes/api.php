@@ -66,4 +66,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/plan/{id}',          [TradingPlanController::class, 'destroy']);
 });
 
-
+// Discord OAuth
+Route::get('/auth/discord/redirect', [DiscordAuthController::class, 'redirect']);
+Route::get('/auth/discord/callback', [DiscordAuthController::class, 'callback']);

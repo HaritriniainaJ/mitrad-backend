@@ -61,3 +61,32 @@ Route::get('/debug-db', function () {
         return response()->json(['error' => $e->getMessage()]);
     }
 });
+Route::get('/fix-tables', function () {
+    try {
+        $results = [];
+        $alterations = [
+            "ALTER TABLE trading_accounts ADD COLUMN IF NOT EXISTS capital numeric(15,2) default 10000",
+            "ALTER TABLE trading_accounts ADD COLUMN IF NOT EXISTS broker varchar(255) default ''",
+            "ALTER TABLE trading_accounts ADD COLUMN IF NOT EXISTS type varchar(255) default 'Personnel'",
+            "ALTER TABLE trading_accounts ADD COLUMN IF NOT EXISTS broker_type varchar(255) default ''",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS pair varchar(255)",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS direction varchar(255)",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS entry_price numeric(15,5)",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS exit_price numeric(15,5)",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS lot_size numeric(15,5)",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS pnl numeric(15,2)",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS rr numeric(15,2)",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS status varchar(255) default 'WIN'",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS note text",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS trade_date date",
+            "ALTER TABLE trades ADD COLUMN IF NOT EXISTS is_imported boolean default false",
+        ];
+        foreach ($alterations as $sql) {
+            DB::statement($sql);
+            $results[] = $sql;
+        }
+        return response()->json(['message' => 'Done', 'applied' => count($results)]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()]);
+    }
+});

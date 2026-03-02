@@ -5,6 +5,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void { /* skipped - incompatible PostgreSQL */ }
-    public function down(): void {}
+    public function up(): void
+    {
+        Schema::table('trades', function (Blueprint $table) {
+            $table->enum('status', ['RUNNING', 'WIN', 'LOSS', 'BE'])->default('RUNNING')->change();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('trades', function (Blueprint $table) {
+            $table->enum('status', ['open', 'closed'])->default('open')->change();
+        });
+    }
 };

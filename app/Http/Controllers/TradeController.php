@@ -19,7 +19,7 @@ class TradeController extends Controller
             'pair'         => 'required|string',
             'direction'    => 'required|in:BUY,SELL',
             'entry_price'  => 'required|numeric',
-            'stop_loss' => 'nullable|numeric',
+            'stop_loss'    => 'required|numeric',
             'take_profit'  => 'nullable|numeric',
             'lot_size'     => 'nullable|numeric',
             'exit_price'   => 'nullable|numeric',

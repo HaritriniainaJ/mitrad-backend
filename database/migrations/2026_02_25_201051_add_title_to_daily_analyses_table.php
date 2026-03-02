@@ -1,7 +1,17 @@
 <?php
 use Illuminate\Database\Migrations\Migration;
-return new class extends Migration
-{
-    public function up(): void { /* skipped */ }
-    public function down(): void {}
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void {
+        Schema::table('daily_analyses', function (Blueprint $table) {
+            $table->string('title')->nullable()->after('date');
+        });
+    }
+    public function down(): void {
+        Schema::table('daily_analyses', function (Blueprint $table) {
+            $table->dropColumn('title');
+        });
+    }
 };

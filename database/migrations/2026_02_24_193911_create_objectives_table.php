@@ -1,7 +1,22 @@
 <?php
 use Illuminate\Database\Migrations\Migration;
-return new class extends Migration
-{
-    public function up(): void { /* skipped */ }
-    public function down(): void {}
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void {
+        Schema::create('objectives', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('text');
+            $table->text('description')->nullable();
+            $table->date('target_date')->nullable();
+            $table->boolean('completed')->default(false);
+            $table->text('image')->nullable();
+            $table->timestamps();
+        });
+    }
+    public function down(): void {
+        Schema::dropIfExists('objectives');
+    }
 };

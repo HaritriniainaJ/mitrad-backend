@@ -55,8 +55,8 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         // Seulement si l'utilisateur n'a pas encore de vrai mot de passe (connecté via Discord)
-        if (!$user->discord_id) {
-            return response()->json(['message' => 'Non autorisé'], 403);
+        if ($user->password_set) {
+            return response()->json(['message' => 'Utilisez la route updatePassword'], 403);
         }
         $data = $request->validate([
             'password' => 'required|min:8|confirmed',

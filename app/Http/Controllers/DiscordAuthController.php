@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
@@ -79,6 +79,64 @@ class DiscordAuthController extends Controller
         } catch (\Exception $e) {
             Log::error('Discord error: ' . $e->getMessage());
             return redirect('https://projournalmitrad.vercel.app/login?error=discord_error&msg=' . urlencode($e->getMessage()));
+        }
+    }
+
+    public function loginFromVercel(Request $request)
+    {
+        try {
+            $discordId = $request->input('discord_id');
+            $email     = $request->input('email');
+            $name      = $request->input('name');
+            $avatar    = $request->input('avatar');
+
+            if (!$discordId) {
+                return response()->json(['error' => 'Missing discord_id'], 400);
+            }
+
+            $user = User::where('discord_id', $discordId)->first();
+            if (!$user && $email) {
+                $user = User::where('email', $email)->first();
+            }
+
+            if ($user) {
+                $user->update([
+                    'discord_id' => $discordId,
+                    'avatar'     => $avatar ?? $user->avatar,
+                ]);
+            } else {
+                $user = User::create([
+                    'name'       => $name ?? 'Discord User',
+                    'email'      => $email ?? $discordId . '@discord.local',
+                    'discord_id' => $discordId,
+                    'avatar'     => $avatar,
+                    'password'   => bcrypt(\Illuminate\Support\Str::random(32)),
+                ]);
+            }
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'token' => $token,
+                'user'  => [
+                    'id'             => $user->id,
+                    'name'           => $user->name,
+                    'email'          => $user->email,
+                    'avatar'         => $user->avatar,
+                    'bio'            => $user->bio,
+                    'country'        => $user->country,
+                    'experience'     => $user->experience,
+                    'trading_style'  => $user->trading_style,
+                    'broker'         => $user->broker,
+                    'banner'         => $user->banner,
+                    'is_public'      => $user->is_public,
+                    'password_set'   => $user->password_set,
+                    'favorite_pairs' => $user->favorite_pairs,
+                    'custom_setups'  => $user->custom_setups,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }

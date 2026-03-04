@@ -1,9 +1,9 @@
-<?php
+﻿<?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use App\Models\User;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -12,16 +12,27 @@ class DiscordAuthController extends Controller
     public function redirect()
     {
         return Socialite::driver('discord')
-            ->scopes(['identify', 'email', 'guilds'])
+            ->scopes(['identify', 'email'])
             ->stateless()
             ->redirect();
     }
 
-    public function callback()
+    public function callback(Request $request)
     {
+        $code = $request->get('code');
+        if (!$code) {
+            return redirect('https://projournalmitrad.vercel.app/login?error=discord_error&msg=No+code');
+        }
+
+        // Eviter de traiter le meme code deux fois
+        $cacheKey = 'discord_code_' . md5($code);
+        if (Cache::has($cacheKey)) {
+            return redirect('https://projournalmitrad.vercel.app/login?error=discord_error&msg=Code+already+used');
+        }
+        Cache::put($cacheKey, true, 60);
+
         try {
             $discordUser = Socialite::driver('discord')->stateless()->user();
-
             $email = $discordUser->getEmail();
             $discordId = $discordUser->getId();
 
@@ -46,7 +57,6 @@ class DiscordAuthController extends Controller
             }
 
             $token = $user->createToken('auth_token')->plainTextToken;
-
             $userData = urlencode(json_encode([
                 'id'            => $user->id,
                 'name'          => $user->name,

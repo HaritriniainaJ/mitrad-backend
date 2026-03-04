@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TradingAccountController;
 use App\Http\Controllers\TradeController;
@@ -68,5 +68,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Discord OAuth
 Route::get('/auth/discord/redirect', [DiscordAuthController::class, 'redirect']);
-Route::post('/auth/discord/login', [DiscordAuthController::class, 'loginFromVercel']);
-
+Route::get('/auth/discord/callback', [DiscordAuthController::class, 'callback']);

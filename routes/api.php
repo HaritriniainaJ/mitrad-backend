@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TradingAccountController;
 use App\Http\Controllers\TradeController;
@@ -9,6 +9,7 @@ use App\Http\Controllers\ObjectiveController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DiscordAuthController;
+use App\Http\Controllers\ReportController;
 
 
 
@@ -64,6 +65,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/plan',                 [TradingPlanController::class, 'store']);
     Route::put('/plan/{id}',             [TradingPlanController::class, 'update']);
     Route::delete('/plan/{id}',          [TradingPlanController::class, 'destroy']);
+});
+
+// Reports publics
+Route::get('/reports/{token}', [ReportController::class, 'show']);
+Route::middleware('auth:sanctum')->group(function() {
+    Route::post('/reports', [ReportController::class, 'store']);
 });
 
 // Discord OAuth

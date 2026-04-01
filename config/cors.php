@@ -1,4 +1,5 @@
 <?php
+
 return [
     'paths' => ['api/*', 'auth/*', 'sanctum/csrf-cookie'],
     'allowed_methods' => ['*'],
@@ -7,6 +8,8 @@ return [
         'http://localhost:8080',
         'https://projournalmitrad.vercel.app',
         'https://*.vercel.app',
+        'https://projournal.mitradacademy.mg',
+        'http://projournal.mitradacademy.mg',
     ],
     'allowed_origins_patterns' => ['#^https://.*\.vercel\.app$#'],
     'allowed_headers' => ['*'],

@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/accounts/{accountId}/trades',              [TradeController::class, 'index']);
     Route::post('/accounts/{accountId}/trades',             [TradeController::class, 'store']);
     Route::post('/accounts/{accountId}/trades/import',   [TradeController::class, 'importBulk']);
-        Route::put('/accounts/{accountId}/trades/{tradeId}',    [TradeController::class, 'update']);
+    Route::put('/accounts/{accountId}/trades/{tradeId}',    [TradeController::class, 'update']);
     Route::delete('/accounts/{accountId}/trades/{tradeId}', [TradeController::class, 'destroy']);
     
     // Analyses du jour

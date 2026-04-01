@@ -64,11 +64,11 @@ class DiscordAuthController extends Controller
                 'custom_setups' => $user->custom_setups,
             ]));
 
-            return redirect('https://projournalmitrad.vercel.app/login?token=' . urlencode($token) . '&user=' . $userData);
+            return redirect('https://projournal.mitradacademy.mg/login?token=' . urlencode($token) . '&user=' . $userData);
 
         } catch (\Exception $e) {
             Log::error('Discord error: ' . $e->getMessage());
-            return redirect('https://projournalmitrad.vercel.app/login?error=discord_error&msg=' . urlencode($e->getMessage()));
+            return redirect('https://projournal.mitradacademy.mg/login?error=discord_error&msg=' . urlencode($e->getMessage()));
         }
     }
 }

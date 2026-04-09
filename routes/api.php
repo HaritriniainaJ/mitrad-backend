@@ -9,22 +9,19 @@ use App\Http\Controllers\ObjectiveController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DiscordAuthController;
-
-
+use App\Http\Controllers\AdminController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',    [AuthController::class, 'login']);
 
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+
     // Profil
-    Route::get('/profile',          [ProfileController::class, 'show']);
-    Route::put('/profile',          [ProfileController::class, 'update']);
-    Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
+    Route::get('/profile',              [ProfileController::class, 'show']);
+    Route::put('/profile',              [ProfileController::class, 'update']);
+    Route::put('/profile/password',     [ProfileController::class, 'updatePassword']);
     Route::put('/profile/set-password', [ProfileController::class, 'setPassword']);
-
-
 
     // Comptes de trading
     Route::get('/accounts',         [TradingAccountController::class, 'index']);
@@ -33,12 +30,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/accounts/{id}', [TradingAccountController::class, 'destroy']);
 
     // Trades par compte
-    Route::get('/accounts/{accountId}/trades',              [TradeController::class, 'index']);
-    Route::post('/accounts/{accountId}/trades',             [TradeController::class, 'store']);
-    Route::post('/accounts/{accountId}/trades/import',   [TradeController::class, 'importBulk']);
-    Route::put('/accounts/{accountId}/trades/{tradeId}',    [TradeController::class, 'update']);
-    Route::delete('/accounts/{accountId}/trades/{tradeId}', [TradeController::class, 'destroy']);
-    
+    Route::get('/accounts/{accountId}/trades',             [TradeController::class, 'index']);
+    Route::post('/accounts/{accountId}/trades',            [TradeController::class, 'store']);
+    Route::post('/accounts/{accountId}/trades/import',     [TradeController::class, 'importBulk']);
+    Route::put('/accounts/{accountId}/trades/{tradeId}',   [TradeController::class, 'update']);
+    Route::delete('/accounts/{accountId}/trades/{tradeId}',[TradeController::class, 'destroy']);
+
     // Analyses du jour
     Route::get('/analyses',         [DailyAnalysisController::class, 'index']);
     Route::post('/analyses',        [DailyAnalysisController::class, 'store']);
@@ -64,6 +61,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/plan',                 [TradingPlanController::class, 'store']);
     Route::put('/plan/{id}',             [TradingPlanController::class, 'update']);
     Route::delete('/plan/{id}',          [TradingPlanController::class, 'destroy']);
+
+    // Admin
+    Route::get('/admin/users',         [AdminController::class, 'users']);
+    Route::put('/admin/users/{id}',    [AdminController::class, 'updateUser']);
+    Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser']);
 });
 
 // Discord OAuth

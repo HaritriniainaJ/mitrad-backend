@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 namespace App\Http\Controllers;
 
@@ -20,16 +20,13 @@ class AdminController extends Controller
         $this->checkAdmin($request);
 
         $users = User::select(
-            'id', 'name', 'email', 'is_admin', 'is_active',
+            'id', 'name', 'email', 'is_admin', 'is_active', 'discord_id',
             'provider', 'avatar', 'country', 'broker',
             'experience', 'trading_style', 'is_public', 'created_at'
         )->orderBy('created_at', 'desc')->get();
 
-        $discord  = $users->where('provider', 'discord')->values();
-        $classic  = $users->where('provider', '!=', 'discord')
-                          ->whereNull('provider')
-                          ->merge($users->where('provider', null))
-                          ->unique('id')->values();
+        $discord  = $users->whereNotNull('discord_id')->values();
+            $classic  = $users->whereNull('discord_id')->values();
 
         return response()->json([
             'discord' => $discord,
